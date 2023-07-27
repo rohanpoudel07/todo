@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import TasksTable from "../components/tasksTable/TasksTable";
 import { GroupContextProvider } from "../context/GroupContext";
 import { MemoryRouter } from "react-router-dom";
@@ -40,9 +40,14 @@ describe("Testing the edit state of TasksTable", () => {
     const editButton = screen.getByTestId("edit-task-btn");
     expect(editButton).toBeInTheDocument();
 
-    act(() => fireEvent.click(editButton));
+    const editRow = editButton.closest("tr");
+    expect(editRow).toBeInTheDocument();
 
-    // expect(setState).toHaveBeenCalled();
+    expect(screen.queryByTestId("modal")).toBe(null);
+
+    act(() => fireEvent.click(screen.getByTestId("edit-task-btn")));
+
+    expect(screen.getByTestId("modal")).toBeInTheDocument();
 
   })
 
